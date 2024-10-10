@@ -24,10 +24,8 @@ class HomeViewModel {
                   switch result {
                   case .success(let photos):
                       self?.photos = photos
-                      print("Fotos atualizadas no ViewModel: \(photos.count)")
                       self?.onDataUpdated?()
                   case .failure(let error):
-                      print("Erro ao buscar dados: \(error)")
                       self?.onError?(error)
                   }
               }

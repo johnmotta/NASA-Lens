@@ -35,10 +35,8 @@ class ServiceManager {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .useDefaultKeys
                 let response = try decoder.decode(MarsRoverPhotosResponse.self, from: data)
-                print("Fotos recebidas: \(response.photos.count)")
                 completion(.success(response.photos))
             } catch {
-                print("Erro ao decodificar dados: \(error)")
                 completion(.failure(.decodingError(error)))
             }
 

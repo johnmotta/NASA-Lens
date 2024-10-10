@@ -27,7 +27,6 @@ class DetailViewController: UIViewController {
         detailScreen?.descriptionLabel.text = photo.earthDate
         let imageUrlString = photo.imgSrc.replacingOccurrences(of: "http://", with: "https://")
         if let imageUrl = URL(string: imageUrlString) {
-            print("Carregando imagem: \(imageUrl)")
             detailScreen?.imageView.sd_setImage(with: imageUrl, placeholderImage: UIImage(systemName: "photo"))
         } else {
             print("URL da imagem inválida:", photo.imgSrc)

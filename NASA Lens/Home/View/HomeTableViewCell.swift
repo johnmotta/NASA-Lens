@@ -68,7 +68,6 @@ class HomeTableViewCell: UITableViewCell {
     func configure(with photo: MarsRoverPhoto) {
         let imageUrlString = photo.imgSrc.replacingOccurrences(of: "http://", with: "https://")
         if let imageUrl = URL(string: imageUrlString) {
-            print("Carregando imagem: \(imageUrl)")
             photoImageView.sd_setImage(with: imageUrl, placeholderImage: UIImage(systemName: "photo"))
         } else {
             print("URL da imagem inválida:", photo.imgSrc)
