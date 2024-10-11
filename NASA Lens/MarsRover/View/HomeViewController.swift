@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(tableView)
         view.backgroundColor = .systemBackground
-        navigationItem.title = "Mars Rover Photos" 
+        navigationItem.title = "Olhares sobre Marte" 
         viewModel.fetchData()
                 
         tableView.delegate = self
