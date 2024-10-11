@@ -16,10 +16,12 @@ class MainTabViewController: UITabBarController {
         
         let homeVC = UINavigationController(rootViewController: HomeViewController())
         homeVC.tabBarItem.image = UIImage(systemName: "circle.grid.cross.fill")
-        homeVC.title = "Mars Rover Photos"
+        homeVC.title = "Olhares sobre Marte"
         
-        
-        
-        setViewControllers([homeVC], animated: true)
+        let asteroidVC = UINavigationController(rootViewController: AsteroidViewController())
+        asteroidVC.tabBarItem.image = UIImage(systemName: "circle.grid.cross.fill")
+        asteroidVC.title = "Asteroides próximos à Terra"
+
+        setViewControllers([homeVC, asteroidVC], animated: true)
     }
 }
