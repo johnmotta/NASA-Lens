@@ -12,6 +12,7 @@ enum NetworkError: Error {
     case noData
     case invalidResponse
     case decodingError(Error)
+    case apiError(Int, String)
     case networkFailure(Error)
     
     var errorDescription: String? {
@@ -26,6 +27,8 @@ enum NetworkError: Error {
             return "Decodificação falhou: \(error.localizedDescription)"
         case .networkFailure(let error):
             return "Falha na rede: \(error.localizedDescription)"
+        case .apiError(let status, let error):
+            return "Error na API. Status code: \(status), error: \(error)"
         }
     }
 }

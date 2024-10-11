@@ -7,7 +7,12 @@
 
 import Foundation
 
-class ServiceManager {
+protocol NEOServiceProtocol {
+    func fetchData(completion: @escaping (Result<[MarsRoverPhoto], NetworkError>) -> Void)
+    func fetchNEOData(startDate: String, endDate: String, completion: @escaping (Result<NEOResponse, NetworkError>) -> Void)
+}
+
+class ServiceManager: NEOServiceProtocol {
     static let shared = ServiceManager()
     
     func fetchData(completion: @escaping (Result<[MarsRoverPhoto], NetworkError>) -> Void) {
@@ -17,7 +22,7 @@ class ServiceManager {
             completion(.failure(.invalidURL(urlString)))
             return
         }
-
+        
         let session = URLSession.shared
         let task = session.dataTask(with: url) { data, _, error in
             if let error {
@@ -41,41 +46,58 @@ class ServiceManager {
         }
         task.resume()
     }
-    
-    func fetchAsteroids(for date: Date? = nil, completion: @escaping (Result<[Asteroid], NetworkError>) -> Void) {
-        var urlString = "\(Constants.API)neo/rest/v1/feed?api_key=\(Constants.API)"
         
-        if let date = date {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "YYYY-MM-dd"
-            let dateString = dateFormatter.string(from: date)
-            urlString += "&start_date=\(dateString)&end_date=\(dateString)"
-        }
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(.invalidURL(urlString)))
+    func fetchNEOData(startDate: String, endDate: String, completion: @escaping (Result<NEOResponse, NetworkError>) -> Void) {
+        let baseURL = "https://api.nasa.gov/neo/rest/v1/feed"
+        let apiKey = Constants.API
+        guard var urlComponents = URLComponents(string: baseURL) else {
+            completion(.failure(.invalidURL(baseURL)))
             return
         }
         
-        let session = URLSession.shared
+        urlComponents.queryItems = [
+            URLQueryItem(name: "start_date", value: startDate),
+            URLQueryItem(name: "end_date", value: endDate),
+            URLQueryItem(name: "api_key", value: apiKey)
+        ]
         
+        guard let url = urlComponents.url else {
+            completion(.failure(.invalidURL(baseURL)))
+            return
+        }
+                
+        let session = URLSession.shared
         let task = session.dataTask(with: url) { data, response, error in
             if let error {
                 completion(.failure(.networkFailure(error)))
                 return
             }
             
-            guard let data else {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(.networkFailure(NSError(domain: "Invalid response", code: 0, userInfo: nil))))
+                return
+            }
+            
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                completion(.failure(.apiError(httpResponse.statusCode, "API Error")))
+                return
+            }
+            
+            guard let data = data else {
                 completion(.failure(.noData))
                 return
             }
             
             do {
                 let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let response = try decoder.decode([Asteroid].self, from: data)
-                completion(.success(response))
+                let neoResponse = try decoder.decode(NEOResponse.self, from: data)
+                completion(.success(neoResponse))
             } catch {
+                print("Decoding error: \(error.localizedDescription)")
+                if let decodingError = error as? DecodingError {
+                    print("Decoding Error Details: \(decodingError)")
+                }
                 completion(.failure(.decodingError(error)))
             }
         }
