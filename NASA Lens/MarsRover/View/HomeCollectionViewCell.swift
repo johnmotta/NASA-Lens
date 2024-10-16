@@ -1,16 +1,16 @@
 //
-//  HomeTableViewCell.swift
+//  HomeCollectionViewCell.swift
 //  NASA Lens
 //
-//  Created by John Motta on 10/10/24.
+//  Created by John Motta on 16/10/24.
 //
 
 import UIKit
 import SDWebImage
 
-class HomeTableViewCell: UITableViewCell {
-
-    static let identifier = String(describing: HomeTableViewCell.self)
+class HomeCollectionViewCell: UICollectionViewCell {
+    
+    static let identifier = String(describing: HomeCollectionViewCell.self)
     
     private let photoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -28,39 +28,32 @@ class HomeTableViewCell: UITableViewCell {
         return label
     }()
     
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        addElements()
-        configConstraints()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(photoImageView)
+        contentView.addSubview(titleLabel)
+        setupConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func addElements() {
-        contentView.addSubview(photoImageView)
-        contentView.addSubview(titleLabel)
-    }
-    
-    private func configConstraints() {
-        photoImageView.contentMode = .scaleAspectFill 
+    private func setupConstraints() {
         let imageConstraints = [
-            photoImageView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            photoImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            photoImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            photoImageView.heightAnchor.constraint(equalToConstant: 150),
-//            photoImageView.widthAnchor.constraint(equalToConstant: 100)
+            photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            photoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            photoImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            photoImageView.heightAnchor.constraint(equalToConstant: 200)
         ]
         
         let titleLabelConstraints = [
             titleLabel.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            titleLabel.heightAnchor.constraint(equalToConstant: 20)
         ]
-                
+        
         NSLayoutConstraint.activate(imageConstraints)
         NSLayoutConstraint.activate(titleLabelConstraints)
     }
@@ -72,8 +65,6 @@ class HomeTableViewCell: UITableViewCell {
         } else {
             print("URL da imagem inválida:", photo.imgSrc)
         }
-
         titleLabel.text = photo.camera.fullName
     }
 }
-

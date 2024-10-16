@@ -10,63 +10,73 @@ import UIKit
 class HomeViewController: UIViewController {
 
     let viewModel = HomeViewModel()
-    private let homeScreen = DetailScreen()
-
-    let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
-        return tableView
+    
+    let collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(tableView)
+        
+        view.addSubview(collectionView)
         view.backgroundColor = .systemBackground
-        navigationItem.title = "Views of Mars" 
+        navigationItem.title = "Views of Mars"
         viewModel.fetchData()
-                
-        tableView.delegate = self
-        tableView.dataSource = self
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
         
         self.reloadData()
     }
-    
+        
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
+        collectionView.frame = view.bounds
     }
     
     private func reloadData() {
         viewModel.onDataUpdated = { [weak self] in
             DispatchQueue.main.async {
-                self?.tableView.reloadData()
+                self?.collectionView.reloadData()
             }
         }
-
     }
 }
 
-extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.photos.count 
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.photos.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier) as? HomeTableViewCell else {
-            return UITableViewCell()
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifier, for: indexPath) as? HomeCollectionViewCell else {
+            return UICollectionViewCell()
         }
         cell.configure(with: viewModel.photos[indexPath.row])
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 300
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let padding: CGFloat = 30
+        let availableWidth = collectionView.frame.width - padding
+        let cellWidth = availableWidth / 2
+        return CGSize(width: cellWidth, height: 300)
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let photo = viewModel.photos[indexPath.row]
         let detailViewController = DetailViewController()
         detailViewController.configure(with: photo)
-        navigationController?.pushViewController(detailViewController, animated: true) 
+        navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
