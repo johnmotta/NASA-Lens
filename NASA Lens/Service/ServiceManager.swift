@@ -8,12 +8,44 @@
 import Foundation
 
 protocol NEOServiceProtocol {
+    func fetchLoadAstronomyPictures(completion: @escaping (Result<Apod, NetworkError>) -> Void)
     func fetchData(completion: @escaping (Result<[MarsRoverPhoto], NetworkError>) -> Void)
     func fetchNEOData(startDate: String, endDate: String, completion: @escaping (Result<NEOResponse, NetworkError>) -> Void)
 }
 
 class ServiceManager: NEOServiceProtocol {
     static let shared = ServiceManager()
+    
+    func fetchLoadAstronomyPictures(completion: @escaping (Result<Apod, NetworkError>) -> Void) {
+        let urlString = "https://api.nasa.gov/planetary/apod?api_key=\(Constants.API)"
+        
+        guard let url = URL(string: urlString) else {
+            completion(.failure(.invalidURL(urlString)))
+            return
+        }
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: url) { data, _, error in
+            if let error {
+                completion(.failure(.networkFailure(error)))
+                return
+            }
+            
+            guard let data else {
+                completion(.failure(.noData))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let result = try decoder.decode(Apod.self, from: data)
+                completion(.success(result))
+            } catch {
+                completion(.failure(.decodingError(error)))
+            }
+        }
+        task.resume()
+    }
     
     func fetchData(completion: @escaping (Result<[MarsRoverPhoto], NetworkError>) -> Void) {
         let urlString = "\(Constants.baseURL)mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=\(Constants.API)"
