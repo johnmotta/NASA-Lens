@@ -13,9 +13,9 @@ class HomeViewController: UIViewController {
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.minimumLineSpacing = 5
+        layout.minimumInteritemSpacing = 5
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
@@ -29,6 +29,7 @@ class HomeViewController: UIViewController {
         view.addSubview(collectionView)
         view.backgroundColor = .systemBackground
         navigationItem.title = "Views of Mars"
+        
         viewModel.fetchData()
         
         collectionView.delegate = self
@@ -67,10 +68,10 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let padding: CGFloat = 30
+        let padding: CGFloat = 20
         let availableWidth = collectionView.frame.width - padding
         let cellWidth = availableWidth / 2
-        return CGSize(width: cellWidth, height: 300)
+        return CGSize(width: cellWidth, height: 200)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
