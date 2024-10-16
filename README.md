@@ -60,7 +60,15 @@ Este projeto segue uma arquitetura baseada em MVVM (Model-View-ViewModel):
 
 ```bash
 ├── NASA Lens/
-│   ├── Home/
+│   ├── APOD/
+│   │   ├── Model/
+│   │   ├── View/
+│   │   ├── ViewModel/
+│   ├── Asteroid/
+│   │   ├── Model/
+│   │   ├── View/
+│   │   ├── ViewModel/
+│   ├── MarsRover/
 │   │   ├── Model/
 │   │   ├── View/
 │   │   ├── ViewModel/
