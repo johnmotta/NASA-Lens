@@ -15,9 +15,16 @@ class HomeCollectionViewCell: UICollectionViewCell {
     private let photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
+    }()
+    
+    private let titleBackgroundView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        return view
     }()
     
     private let titleLabel: UILabel = {
@@ -25,12 +32,14 @@ class HomeCollectionViewCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         label.textColor = .white
+        label.numberOfLines = 2
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(photoImageView)
+        contentView.addSubview(titleBackgroundView)
         contentView.addSubview(titleLabel)
         setupConstraints()
     }
@@ -40,22 +49,21 @@ class HomeCollectionViewCell: UICollectionViewCell {
     }
     
     private func setupConstraints() {
-        let imageConstraints = [
+        NSLayoutConstraint.activate([
             photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             photoImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            photoImageView.heightAnchor.constraint(equalToConstant: 200)
-        ]
-        
-        let titleLabelConstraints = [
-            titleLabel.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            titleLabel.heightAnchor.constraint(equalToConstant: 20)
-        ]
-        
-        NSLayoutConstraint.activate(imageConstraints)
-        NSLayoutConstraint.activate(titleLabelConstraints)
+            photoImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            titleBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            titleBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            titleBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            titleLabel.topAnchor.constraint(equalTo: titleBackgroundView.topAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: titleBackgroundView.leadingAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(equalTo: titleBackgroundView.trailingAnchor, constant: -8),
+            titleLabel.bottomAnchor.constraint(equalTo: titleBackgroundView.bottomAnchor, constant: -8)
+        ])
     }
     
     func configure(with photo: MarsRoverPhoto) {
