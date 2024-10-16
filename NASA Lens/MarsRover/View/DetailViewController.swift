@@ -10,10 +10,9 @@ import SDWebImage
 
 class DetailViewController: UIViewController {
     
-    var detailScreen: DetailScreen?
+    var detailScreen = DetailScreen()
     
     override func loadView() {
-        detailScreen = DetailScreen()
         view = detailScreen
     }
     
@@ -23,13 +22,6 @@ class DetailViewController: UIViewController {
     }
     
     func configure(with photo: MarsRoverPhoto) {
-        detailScreen?.titleLabel.text = photo.camera.fullName
-        detailScreen?.descriptionLabel.text = photo.earthDate
-        let imageUrlString = photo.imgSrc.replacingOccurrences(of: "http://", with: "https://")
-        if let imageUrl = URL(string: imageUrlString) {
-            detailScreen?.imageView.sd_setImage(with: imageUrl, placeholderImage: UIImage(systemName: "photo"))
-        } else {
-            print("URL da imagem inválida:", photo.imgSrc)
-        }
+        detailScreen.configure(with: photo)
     }
 }
