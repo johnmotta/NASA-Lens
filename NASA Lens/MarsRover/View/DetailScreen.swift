@@ -25,7 +25,6 @@ class DetailScreen: UIView {
     private let imageContainerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .lightGray
         view.clipsToBounds = true
         return view
     }()
@@ -54,6 +53,29 @@ class DetailScreen: UIView {
         label.textColor = .gray
         return label
     }()
+    
+    private let roverInfoLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .darkGray
+        return label
+    }()
+    
+    private let cameraInfoLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .darkGray
+        return label
+    }()
+    
+    private let shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Share Photo", for: .normal)
+        return button
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,13 +88,16 @@ class DetailScreen: UIView {
     }
 
     private func setupViews() {
-        
         addSubview(scrollView)
         scrollView.addSubview(contentView)
         
         contentView.addSubview(imageContainerView)
         imageContainerView.addSubview(imageView)
-        [titleLabel, descriptionLabel].forEach { contentView.addSubview($0) }
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(roverInfoLabel)
+        contentView.addSubview(cameraInfoLabel)
+        contentView.addSubview(shareButton)
         
         setupConstraints()
     }
@@ -80,7 +105,7 @@ class DetailScreen: UIView {
     private func setupConstraints() {
         let screenWidth = UIScreen.main.bounds.width
         let imageSize = screenWidth
-        let aspectRatio: CGFloat = 4/3
+        let aspectRatio: CGFloat = 4 / 3
 
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
@@ -98,7 +123,7 @@ class DetailScreen: UIView {
             imageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageContainerView.widthAnchor.constraint(equalToConstant: imageSize),
-            imageContainerView.heightAnchor.constraint(equalTo: imageContainerView.widthAnchor, multiplier: 1/aspectRatio),
+            imageContainerView.heightAnchor.constraint(equalTo: imageContainerView.widthAnchor, multiplier: 1 / aspectRatio),
             
             imageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: imageContainerView.leadingAnchor),
@@ -112,7 +137,18 @@ class DetailScreen: UIView {
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            
+            roverInfoLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
+            roverInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            roverInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            
+            cameraInfoLabel.topAnchor.constraint(equalTo: roverInfoLabel.bottomAnchor, constant: 5),
+            cameraInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            cameraInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            
+            shareButton.topAnchor.constraint(equalTo: cameraInfoLabel.bottomAnchor, constant: 20),
+            shareButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            shareButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
@@ -126,6 +162,8 @@ class DetailScreen: UIView {
         
         titleLabel.text = photo.camera.fullName
         descriptionLabel.text = "Earth Date: \(photo.earthDate)"
+        roverInfoLabel.text = "Rover: \(photo.rover.name) - Status: \(photo.rover.status)"
+        cameraInfoLabel.text = "Camera: \(photo.camera.name)"
         
         let imageUrlString = photo.imgSrc.replacingOccurrences(of: "http://", with: "https://")
         guard let imageUrl = URL(string: imageUrlString) else {
