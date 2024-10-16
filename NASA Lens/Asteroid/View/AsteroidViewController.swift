@@ -16,11 +16,11 @@ class AsteroidViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         fetchAsteroids()
-        navigationItem.title = "Asteroides próximos à Terra"
+        navigationItem.title = "Near-Earth Asteroids"
     }
 
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(tableView)
         view.addSubview(activityIndicator)
         

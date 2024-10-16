@@ -13,15 +13,18 @@ class MainTabViewController: UITabBarController {
         super.viewDidLoad()
         tabBar.tintColor = .label
 
+        let astronomyPictureVC = UINavigationController(rootViewController: AstronomyPictureViewController())
+        astronomyPictureVC.tabBarItem.image = UIImage(systemName: "photo.artframe")
+        astronomyPictureVC.title = "Photo of the day"
         
         let homeVC = UINavigationController(rootViewController: HomeViewController())
         homeVC.tabBarItem.image = UIImage(systemName: "circle.grid.cross.fill")
-        homeVC.title = "Olhares sobre Marte"
+        homeVC.title = "Views of Mars"
         
         let asteroidVC = UINavigationController(rootViewController: AsteroidViewController())
-        asteroidVC.tabBarItem.image = UIImage(systemName: "circle.grid.cross.fill")
-        asteroidVC.title = "Asteroides próximos à Terra"
+        asteroidVC.tabBarItem.image = UIImage(systemName: "network")
+        asteroidVC.title = "Near-Earth Asteroids"
 
-        setViewControllers([homeVC, asteroidVC], animated: true)
+        setViewControllers([astronomyPictureVC, homeVC, asteroidVC], animated: true)
     }
 }
