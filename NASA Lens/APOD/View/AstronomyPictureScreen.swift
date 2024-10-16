@@ -9,19 +9,11 @@ import UIKit
 
 class AstronomyPictureScreen: UIView {
     
-    let scrollView: UIScrollView = {
+    let descriptionScrollView: UIScrollView = {
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
-        scroll.showsVerticalScrollIndicator = false
         scroll.backgroundColor = .systemBackground
-        scroll.frame = UIScreen.main.bounds
         return scroll
-    }()
-    
-    let containerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
     }()
     
     let titleLabel: UILabel =  {
@@ -35,7 +27,7 @@ class AstronomyPictureScreen: UIView {
     let imageView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.sizeToFit()
+        image.contentMode = .scaleAspectFill
         return image
     }()
     
@@ -47,53 +39,43 @@ class AstronomyPictureScreen: UIView {
         label.lineBreakMode = .byWordWrapping
         return label
     }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(scrollView)
-        scrollView.addSubview(containerView)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(imageView)
-        containerView.addSubview(descriptionLabel)
+        addSubview(titleLabel)
+        addSubview(imageView)
+        addSubview(descriptionScrollView)
+        descriptionScrollView.addSubview(descriptionLabel)
         
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-        
-        setupLayout()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupLayout() {
+    private func setConstraints() {
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-        ])
-        
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            titleLabel.heightAnchor.constraint(equalToConstant: 40),
+            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             
-            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
-            imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             imageView.heightAnchor.constraint(equalToConstant: 300),
             
-            descriptionLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 30),
-            descriptionLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 10),
-            descriptionLabel.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -10),
-            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            descriptionScrollView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+            descriptionScrollView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            descriptionScrollView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            descriptionScrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: descriptionScrollView.topAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: descriptionScrollView.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: descriptionScrollView.trailingAnchor),
+            descriptionLabel.bottomAnchor.constraint(equalTo: descriptionScrollView.bottomAnchor),
+            descriptionLabel.widthAnchor.constraint(equalTo: descriptionScrollView.widthAnchor)
         ])
     }
     
