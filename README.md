@@ -7,6 +7,7 @@ NASA Lens é um aplicativo iOS que utiliza a API da NASA para exibir fotos captu
 | <img src="https://i.imgur.com/CgPMc0f.png" width="200"/> | <img src="https://i.imgur.com/wlkc5ND.png" width="200"/> | <img src="https://i.imgur.com/yDA46Xu.png" width="200"/> |  <img src="https://i.imgur.com/2vbCegn.png" width="200"/> |
 
 
+
 ## Funcionalidades
 
 - **Exploração de Fotos**: Listagem de fotos tiradas pelo rover Curiosity em Marte.
