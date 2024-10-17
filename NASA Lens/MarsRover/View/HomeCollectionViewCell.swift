@@ -12,13 +12,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     static let identifier = String(describing: HomeCollectionViewCell.self)
     
-    private let photoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    private let photoImageView = ImageDefault(contentMode: .scaleAspectFill, clipsToBounds: true)
     
     private let titleBackgroundView: UIView = {
         let view = UIView()
@@ -27,28 +21,26 @@ class HomeCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-        label.textColor = .white
-        label.numberOfLines = 2
-        return label
-    }()
+    private let titleLabel = LabelDefault(textColor: .white, fontSize: 14, fontWeight: .bold, numberOfLines: 2)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(photoImageView)
-        contentView.addSubview(titleBackgroundView)
-        contentView.addSubview(titleLabel)
-        setupConstraints()
+        
+        addElements()
+        setConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupConstraints() {
+    private func addElements() {
+        contentView.addSubview(photoImageView)
+        contentView.addSubview(titleBackgroundView)
+        contentView.addSubview(titleLabel)
+    }
+    
+    private func setConstraints() {
         NSLayoutConstraint.activate([
             photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),

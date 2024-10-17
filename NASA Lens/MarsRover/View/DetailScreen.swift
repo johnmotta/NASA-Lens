@@ -10,11 +10,7 @@ import SDWebImage
 
 class DetailScreen: UIView {
     
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
+    private let scrollView = ScrollDefault()
     
     private let contentView: UIView = {
         let view = UIView()
@@ -29,46 +25,12 @@ class DetailScreen: UIView {
         return view
     }()
 
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    private let imageView = ImageDefault(contentMode: .scaleAspectFill, clipsToBounds: true)
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    private let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .gray
-        return label
-    }()
-    
-    private let roverInfoLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .darkGray
-        return label
-    }()
-    
-    private let cameraInfoLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .darkGray
-        return label
-    }()
+    private let titleLabel = LabelDefault(fontSize: 20, fontWeight: .bold, numberOfLines: 0)
+    private let descriptionLabel = LabelDefault(fontSize: 16, fontWeight: .regular, numberOfLines: 0)
+    private let roverInfoLabel = LabelDefault(fontSize: 16, fontWeight: .regular)
+    private let cameraInfoLabel = LabelDefault(fontSize: 16, fontWeight: .regular)
     
     private let shareButton: UIButton = {
         let button = UIButton(type: .system)
@@ -79,15 +41,17 @@ class DetailScreen: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
+        
+        addElements()
+        setConstraints()
+
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupViews()
     }
-
-    private func setupViews() {
+    
+    private func addElements() {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
         
@@ -98,11 +62,9 @@ class DetailScreen: UIView {
         contentView.addSubview(roverInfoLabel)
         contentView.addSubview(cameraInfoLabel)
         contentView.addSubview(shareButton)
-        
-        setupConstraints()
     }
     
-    private func setupConstraints() {
+    private func setConstraints() {
         let screenWidth = UIScreen.main.bounds.width
         let imageSize = screenWidth
         let aspectRatio: CGFloat = 4 / 3
