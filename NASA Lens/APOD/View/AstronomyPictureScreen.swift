@@ -9,50 +9,30 @@ import UIKit
 
 class AstronomyPictureScreen: UIView {
     
-    let descriptionScrollView: UIScrollView = {
-        let scroll = UIScrollView()
-        scroll.translatesAutoresizingMaskIntoConstraints = false
-        scroll.backgroundColor = .systemBackground
-        return scroll
-    }()
+    let descriptionScrollView = ScrollDefault()
     
-    let titleLabel: UILabel =  {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 20, weight: .bold)
-        label.textAlignment = .center
-        return label
-    }()
+    let titleLabel = LabelDefault(fontSize: 20, fontWeight: .bold, textAligment: .center)
+    let descriptionLabel = LabelDefault(fontSize: 16, fontWeight: .light, numberOfLines: 0, textAligment: .justified)
     
-    let imageView: UIImageView = {
-        let image = UIImageView()
-        image.translatesAutoresizingMaskIntoConstraints = false
-        image.contentMode = .scaleAspectFill
-        return image
-    }()
+    let imageView = ImageDefault(contentMode: .scaleAspectFill)
     
-    let descriptionLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .justified
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        return label
-    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubview(titleLabel)
-        addSubview(imageView)
-        addSubview(descriptionScrollView)
-        descriptionScrollView.addSubview(descriptionLabel)
-        
+        addElements()
         setConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addElements() {
+        addSubview(titleLabel)
+        addSubview(imageView)
+        addSubview(descriptionScrollView)
+        descriptionScrollView.addSubview(descriptionLabel)
     }
     
     private func setConstraints() {
